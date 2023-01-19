@@ -26,7 +26,13 @@ const SummaryTable = () => {
       </div>
       <div className="grid grid-rows-7 grid-flow-col gap-3">
         {summaryDates.map(date => {
-          return <HabitDay key={String(date)} />
+          return (
+            <HabitDay
+              key={String(date)}
+              amount={5}
+              completed={4}
+            />
+          );
         })}
         {amountOfDaysToFill > 0 && Array.from({ length: amountOfDaysToFill })
           .map((_value, index) => {
