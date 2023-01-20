@@ -1,7 +1,50 @@
-import * as Dialog from '@radix-ui/react-dialog';
-import { Check, X } from 'phosphor-react';
+import * as Dialog from "@radix-ui/react-dialog";
+import { Check, X } from "phosphor-react";
+import { FormEvent, useState } from "react";
+import ReactLoading from "react-loading";
+import colors from "tailwindcss/colors";
+
+import { createHabit } from "../../services";
+
+import CheckboxModal from "./Checkbox";
+import { weekDaysFullName } from "./constants";
 
 const Modal = () => {
+  const [title, setTitle ] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [daysOfTheWeek, setDaysOfTheWeek] = useState<number[]>([]);
+
+  const handleToggleDaysOfTheWeek = (weekDay: number) => {
+    if(daysOfTheWeek.includes(weekDay)) {
+      setDaysOfTheWeek(prevState => [...prevState.filter(day => day !== weekDay)]);
+    } else {
+      setDaysOfTheWeek(prevState => [...prevState, weekDay]);
+    }
+  };
+
+  const onSubmit = async (event: FormEvent) => {
+    setIsLoading(true);
+    event.preventDefault();
+    if(!title || daysOfTheWeek.length === 0) {
+      return;
+    }
+
+    const response = await createHabit({
+      title,
+      weekDays: daysOfTheWeek
+    });
+
+    if(response) {
+      setTitle("");
+      setDaysOfTheWeek([]);
+      alert("Hábito criado com sucesso!");
+    } else {
+      alert("Um erro inesperado aconteceu! Por favor tente novamente.");
+    }
+
+    setIsLoading(false);
+  };
+
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="w-screen h-screen bg-black/80 fixed inset-0">
@@ -25,7 +68,7 @@ const Modal = () => {
           <Dialog.Title className="text-3xl landing-tight font-extrabold">
             Criar hábito
           </Dialog.Title>
-          <form className="w-full flex flex-col mt-6">
+          <form onSubmit={onSubmit} className="w-full flex flex-col mt-6">
             <label htmlFor="title" className="font-semibold leading-tight">
               Qual o seu comprometimento?
             </label>
@@ -35,16 +78,49 @@ const Modal = () => {
               placeholder="Ex: Exercícios, dormir bem, etc..."
               autoFocus
               className="mt-4 p-4 rounded-lg bg-zinc-800 text-white placeholder:text-zinc-400"
+              value={title}
+              onChange={event => setTitle(event.target.value)}
             />
             <label htmlFor="" className="font-semibold leading-tight mt-6">
               Qual a recorrência?
             </label>
-
+            <div className="mt-6 flex flex-col gap-2 mt-3">
+              {weekDaysFullName.map((weekDay, index) => (
+                <CheckboxModal
+                  key={weekDay}
+                  title={weekDay}
+                  checked={daysOfTheWeek.includes(index)}
+                  onCheckedChange={() => handleToggleDaysOfTheWeek(index)}
+                />
+              ))}
+            </div>
             <button
               type="submit"
-              className="mt-6 rounded-lg p-4 gap-3 flex items-center justify-center font-semibold bg-green-600 hover:bg-green-500">
-              <Check size={24} weight="bold" />
-              Confirmar
+              disabled={!title || daysOfTheWeek.length === 0}
+              className={`
+                mt-6
+                rounded-lg
+                p-4
+                gap-3
+                flex
+                items-center
+                justify-center
+                font-semibold
+                bg-green-600
+                hover:bg-green-500
+                disabled:bg-zinc-800
+                disabled:text-zinc-500
+              `}
+            >
+              {isLoading && (
+                <ReactLoading type="spin" color={colors.white} height={24} width={24} />
+              )}
+              {!isLoading && (
+                <>
+                  <Check size={24} weight="bold" />
+                  Confirmar
+                </>
+              )}
             </button>
           </form>
         </Dialog.Content>

@@ -1,5 +1,5 @@
-import Header from './components/Header';
-import SummaryTable from './components/SummaryTable';
+import Header from "./components/Header";
+import SummaryTable from "./components/SummaryTable";
 
 function App() {
   return (

@@ -1,8 +1,8 @@
-import { Plus } from 'phosphor-react';
-import * as Dialog from '@radix-ui/react-dialog';
+import { Plus } from "phosphor-react";
+import * as Dialog from "@radix-ui/react-dialog";
 
-import logoImage from '../../assets/logo.svg';
-import Modal from '../Modal';
+import logoImage from "../../assets/logo.svg";
+import Modal from "../Modal";
 
 const Header = () => {
   return (

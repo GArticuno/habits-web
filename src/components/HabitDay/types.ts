@@ -1,4 +1,5 @@
 export type HabitDayProps = {
-  completed: number;
-  amount: number;
+  date: Date;
+  completed?: number;
+  amount?: number;
 };
