@@ -14,6 +14,7 @@ const Modal = () => {
             w-full
             max-w-md
             top-1/2
+            left-1/2
             -translate-x-1/2
             -translate-y-1/2
           `}
@@ -33,7 +34,7 @@ const Modal = () => {
               type="text"
               placeholder="Ex: Exercícios, dormir bem, etc..."
               autoFocus
-              className="p-4 rounded-lg bg-zinc-800 text-white placeholder:text-zinc-400"
+              className="mt-4 p-4 rounded-lg bg-zinc-800 text-white placeholder:text-zinc-400"
             />
             <label htmlFor="" className="font-semibold leading-tight mt-6">
               Qual a recorrência?
