@@ -9,29 +9,29 @@ import { DayResponse } from "../../../services/types";
 import { CheckboxComponentProps } from "./types";
 
 const HabitsList = ({ date, onCompletedChanged }: CheckboxComponentProps) => {
-  const [days, setDays] = useState<DayResponse | null>(null);
+  const [day, setDay] = useState<DayResponse | null>(null);
   const isDateInPast = dayjs(date).endOf("day").isBefore(new Date());
 
   const handleGetDay = async () => {
     const data = await getDay({ date });
-    setDays(data);
+    setDay(data);
   };
 
   const handleToggleHabit = async (habitId: string) => {
-    if(days) {
-      const isHabitAlreadyCompleted = days!.completedHabits.includes(habitId);
+    if(day) {
+      const isHabitAlreadyCompleted = day.completedHabits.includes(habitId);
       await toggleHabit({ id: habitId });
 
       let completedHabits: string[] = [];
 
       if(isHabitAlreadyCompleted) {
-        completedHabits = days.completedHabits.filter(id => id !== habitId);
+        completedHabits = day.completedHabits.filter(id => id !== habitId);
       } else {
-        completedHabits = [...days.completedHabits, habitId];
+        completedHabits = [...day.completedHabits, habitId];
       }
 
-      setDays({
-        possibleHabits: days.possibleHabits,
+      setDay({
+        possibleHabits: day.possibleHabits,
         completedHabits,
       });
 
@@ -45,13 +45,13 @@ const HabitsList = ({ date, onCompletedChanged }: CheckboxComponentProps) => {
 
   return (
     <div className="mt-6 flex flex-col gap-3">
-      {days?.possibleHabits.map((item, index) => {
+      {day?.possibleHabits.map((item, index) => {
         return (
           <CheckboxRadix.Root
             className="flex items-center gap-3 group focus:outline-none disabled:cursor-not-allowed"
             key={item.id}
             disabled={isDateInPast}
-            checked={days.completedHabits.includes(item.id)}
+            checked={day.completedHabits.includes(item.id)}
             onCheckedChange={() => handleToggleHabit(item.id)}
           >
             <div
