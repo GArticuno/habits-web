@@ -11,7 +11,7 @@ export type CreateHabitRequest = {
 }
 
 export type DayRequest = {
-  date: string;
+  date: Date;
 };
 
 export type DayResponse = {

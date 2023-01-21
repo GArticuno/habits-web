@@ -22,7 +22,13 @@ const Header = () => {
             flex
             items-center
             gap-3
+            transition-colors
             hover:border-violet-300
+            focus:outline-none
+            focus:ring-2
+            focus:ring-violet-700
+            focus:ring-offset-2
+            focus:ring-offset-background
           `}
         >
           <Plus className="text-violet-500" />

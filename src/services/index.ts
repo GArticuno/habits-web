@@ -22,15 +22,17 @@ export const createHabit = async (data: CreateHabitRequest) => {
   };
 };
 
-export const getDay = async (params: DayRequest) => {
+export const getDay = async ({ date }: DayRequest) => {
   try {
     const response  = await api.get<DayResponse>("/day", {
-      params,
+      params: {
+        date: date.toISOString(),
+      },
     });
     return response.data;
   } catch (err) {
     console.log("Get Day", err);
-    return [];
+    return null;
   };
 };
 

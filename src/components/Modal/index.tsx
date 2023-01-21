@@ -1,6 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { Check, X } from "phosphor-react";
 import { FormEvent, useState } from "react";
+import { toast } from "react-hot-toast";
 import ReactLoading from "react-loading";
 import colors from "tailwindcss/colors";
 
@@ -25,9 +26,6 @@ const Modal = () => {
   const onSubmit = async (event: FormEvent) => {
     setIsLoading(true);
     event.preventDefault();
-    if(!title || daysOfTheWeek.length === 0) {
-      return;
-    }
 
     const response = await createHabit({
       title,
@@ -37,9 +35,9 @@ const Modal = () => {
     if(response) {
       setTitle("");
       setDaysOfTheWeek([]);
-      alert("Hábito criado com sucesso!");
+      toast.success("Hábito criado com sucesso!");
     } else {
-      alert("Um erro inesperado aconteceu! Por favor tente novamente.");
+      toast.error("Um erro inesperado aconteceu! Por favor tente novamente.");
     }
 
     setIsLoading(false);
@@ -62,7 +60,21 @@ const Modal = () => {
             -translate-y-1/2
           `}
         >
-          <Dialog.Close className="absolute right-6 top-6 text-zinc-400 hover:text-zinc-200">
+          <Dialog.Close
+            className={`
+              absolute
+              right-6
+              top-6
+              rounded-lg
+              text-zinc-400
+              hover:text-zinc-200
+              focus:outline-none
+              focus:ring-2
+              focus:ring-violet-600
+              focus:ring-offset-2
+              focus:ring-offset-background
+            `} 
+          >
             <X size={24} aria-label="Fechar" />
           </Dialog.Close>
           <Dialog.Title className="text-3xl landing-tight font-extrabold">
@@ -77,7 +89,19 @@ const Modal = () => {
               type="text"
               placeholder="Ex: Exercícios, dormir bem, etc..."
               autoFocus
-              className="mt-4 p-4 rounded-lg bg-zinc-800 text-white placeholder:text-zinc-400"
+              className={`
+                mt-4
+                p-4
+                rounded-lg
+                bg-zinc-800
+                text-white
+                placeholder:text-zinc-400
+                focus:outline-none
+                focus:ring-2
+                focus:ring-violet-600
+                focus:ring-offset-2
+                focus:ring-offset-zinc-900
+              `}
               value={title}
               onChange={event => setTitle(event.target.value)}
             />
@@ -106,10 +130,16 @@ const Modal = () => {
                 items-center
                 justify-center
                 font-semibold
+                transition-colors
                 bg-green-600
                 hover:bg-green-500
                 disabled:bg-zinc-800
                 disabled:text-zinc-500
+                focus:outline-none
+                focus:ring-2
+                focus:ring-green-600
+                focus:ring-offset-2
+                focus:ring-offset-zinc-900
               `}
             >
               {isLoading && (
